@@ -4,6 +4,7 @@ const db = new Database("database");//Bayrak & WenSamita Neiva
 //Bayrak & WenSamita Neiva
 exports.run = async (client, message, args) => {//Bayrak & WenSamita Neiva
   let bayrakwen = args[0];//Bayrak & WenSamita Neiva
+  let coinsayi = db.fetch(`coin_${message.author.id}`)
   if(!bayrakwen) {
           const embed = new Discord.MessageEmbed()
       .setColor("BLUE")
@@ -48,6 +49,7 @@ exports.run = async (client, message, args) => {//Bayrak & WenSamita Neiva
     db.delete(`${message.guild.id}.partner`);
     return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
   } else if (bayrakwen == "sıfırla") {
+    db.delete(`${message.guild.id}.text`);
     db.delete(`${message.guild.id}.partner`)
     db.delete(`${message.guild.id}.partner_kanal`)
     db.delete(`${message.guild.id}.partner_yetkili_rol`)
@@ -58,21 +60,42 @@ exports.run = async (client, message, args) => {//Bayrak & WenSamita Neiva
     //burayı yapıcam
     return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
   } else if (bayrakwen == "kanal") {
-    let kanal = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]);
-    if(!channel) return embed("")
-    return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
+    let arg = args[1]
+    if(arg == "ayarla") {
+      let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]);
+      if(!channel) return embed("❌ | Lütfen bir kanal etiketleyin.")
+      db.set(`partnerkanal.ayarla_${message.guild.id}`, channel)
+      return embed(`**✅ | Partner kanalı başarıyla <#${channel.id}> olarak ayarlandı.**`);
+      }
   } else if (bayrakwen == "log") {
-    //burayı yapıcam
-    return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
+      let arg = args[1]
+      if(arg == "ayarla") {
+      let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]);
+      if(!channel) return embed("❌ | Lütfen bir kanal etiketleyin.")
+    db.set(`partnerlogayarla_${message.guild.id}`, channel)
+    return embed(`**✅ | Partner log kanalı başarıyla <#${channel.id}> olarak ayarlandı.**`);
+  }
+  if(arg == 'sıfırla'){
+  db.delete(`partnerlogayarla_${message.guild.id}`)
+  return embed(`**✅ | Partner kanalı başarıyla sıfırlandı.**`)
+  }
   } else if (bayrakwen == "şart") {
-    //burayı yapıcam
-    
+        let arg = args[1]
+    if(arg == "ayarla") {
+      let üye = args[2]
+      if(message.guild.memberCount > üye) return embed(`❌ | Üzgünüm, maximum sunucunuzda bulanan üye sayısı, yani \`${message.guild.memberCount}\` yapabilirsiniz.`)
+      db.set(`partnerşart_ayarla.${message.guild.id}`, üye)
+      return embed(`**✅ | Artık sunucusundaki üye sayısı \`${üye}\`'dan büyük olmayan sunucular bu sunucuya partnerlik isteği atamayacak.**`);
+      }
+      if(arg == "sıfırla") {
+      db.delete(`partnerşart_ayarla.${message.guild.id}`)
+      return embed(`**✅ | Partner şart başarıyla sıfırlandı.**`);
+      }
   } else if (bayrakwen == "vip") {
-    //burayı yapıcam
-    return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
+  return embed(`❌ | Sunucunuza premium alabilmek için 150 Coine ihtiyacınız var. Bilgi almak için [tıkla](https://discord.gg/sBGxGhcFG4).`)
+    return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");//150 coinimiz olmadığı için yapmadık
   } else if (bayrakwen == "izin") {
-    //burayı yapıcam
-    return embed("✅ | Partnerlik sistemi başarıyla deaktif hale getirildi.");
+    if(coinsayi < 75) return embed(`❌ | Sunucunuza 2 davet linki izni almak için 75 Coine ihtiyacınız var. Bilgi almak için [tıkla](https://discord.gg/sBGxGhcFG4).`);
   } else {
       const embed = new Discord.MessageEmbed()
       .setColor("BLUE")
@@ -99,14 +122,14 @@ exports.run = async (client, message, args) => {//Bayrak & WenSamita Neiva
         message.author.tag,//Bayrak & WenSamita Neiva
         message.author.avatarURL({ dynamic: true })//Bayrak & WenSamita Neiva
       )//Bayrak & WenSamita Neiva
-      .setDescrition(`**${text}**`)//Bayrak & WenSamita Neiva
+      .setDescription(`**${text}**`)//Bayrak & WenSamita Neiva
       .setTimestamp()//Bayrak & WenSamita Neiva
       .setFooter(client.user.username, client.user.avatarURL());//Bayrak & WenSamita Neiva
     let msg = await message.channel.send(embed);//Bayrak & WenSamita Neiva
     return msg;//Bayrak & WenSamita Neiva
   }//Bayrak & WenSamita Neiva
 };//Bayrak & WenSamita Neiva
-//Bayrak & WenSamita Neiva
+//Bayrak & WenSamita Neiva  
 exports.conf = {//Bayrak & WenSamita Neiva
   enabled: true,//Bayrak & WenSamita Neiva
   guildOnly: false,//Bayrak & WenSamita Neiva
