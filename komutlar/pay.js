@@ -10,6 +10,8 @@ if(!kullanıcı) return message.channel.send('Lütfen Kullanıcı Etiketleyin');
 if(!coinsayi) return message.channel.send('Lütfen Miktar Yazın');//Bayrak & WenSamita Neiva
 if(coinsayi < 5) return message.channel.send(`${message.author} Minimum **5** Coin Yollayabilirsin!`)//Bayrak & WenSamita Neiva
 if(coin < coinsayi) return message.channel.send(`${message.author} Senin Bakiyende **${coinsayi}** Coins Yok!`)//Bayrak & WenSamita Neiva
+if(kullanıcı.id == message.author.id) return message.channel.send(`${message.author} **Kendine** Para Gönderemezsin!`)
+if(kullanıcı.bot) return message.channel.send(`${message.author} **Bot**lara Coin Göndermezsin!`)
 db.add(`coin_${message.author.id}`, -coinsayi)//Bayrak & WenSamita Neiva
 db.add(`coin_${kullanıcı.id}`, -coinsayi)//Bayrak & WenSamita Neiva
 return message.reply(`${kullanıcı} kişisine ${coinsayi} Coin Gönderildi!`)//Bayrak & WenSamita Neiva
