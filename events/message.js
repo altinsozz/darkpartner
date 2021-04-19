@@ -44,7 +44,7 @@ Detaylar İçin [Tıkla!](https://discord.gg/sBGxGhcFG4)`)//ab intentleri ac kap
     if (bakım) {
 if (!ayarlar.sahip.includes(message.author.id) && !ayarlar.sahip.includes(message.author.id)) {
         require("moment-duration-format");
-    let bayrakab = db.get(`bakımsüre`);
+    let bayrakab = db.get(`bakımsüre_`);
     const duration = moment
       .duration(Date.now() - bayrakab)
       .format(" D [gün], H [saat], m [dakika], s [saniye]");
