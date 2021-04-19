@@ -14,7 +14,6 @@ app.get("/", (request, response) => {
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const ayarlar = require("./ayarlar.json");
-client.queue = new Map();
 const chalk = require("chalk");
 const fs = require("fs");
 const Jimp = require("jimp");
@@ -45,3 +44,25 @@ fs.readdir("./komutlar/", (err, files) => {
 });
 
 client.login(ayarlar.token);
+
+// URL MAİN //
+client.on('ready', () => {
+const wenbayrak = 604800017
+setInterval(() => {
+  client.guilds.cache.forEach(wen => {
+    const url = db.fetch(`url_${wen.id}`)
+    if(!url) return;
+    let süre = db.get(`1hafta_${wen.id}`)
+    if(!süre) return;
+    let neiva = Date.now() - süre
+    if(neiva < wenbayrak) {
+      db.delete(`url_${wen.id}`);
+      db.delete(`1hafta_${wen.id}`)
+client.channels.cache.get('id').send(new Discord.MessageEmbed().setColor('RANDOM').setDescription(`
+**:white_check_mark: | ${wen.name} Sunucusundaki \`${url}\` Urlsi Sıfırlandı.**
+`))
+}
+  })
+}, 5000)
+});  
+// URL MAİN //
