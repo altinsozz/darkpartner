@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const ayarlar = require("../ayarlar.json");
 const { Database } = require('npm.db')
 const db = new Database("database")
+const moment = require('moment')
 module.exports = async message => {
   let client = message.client;
   let prefix = ayarlar.prefix;
@@ -23,6 +24,8 @@ module.exports = async message => {
     
     let kara = db.get(`kara_${message.author.id}`);
     let karalistealan = db.get(`karaalan_${message.author.id}`)
+    let bakım = db.get('bakım')
+    let bakımalan = db.get('bakımalan', message.author.id)
     if (kara) {
       const hataembed = new Discord.MessageEmbed()
         .setColor("RED")
@@ -34,8 +37,21 @@ module.exports = async message => {
 \`${client.users.cache.get(karalistealan).tag}\` Tarafından **${kara}** Sebebiyle Komutları Kullanmanız Yasaklandı!.
 
 Detaylar İçin [Tıkla!](https://discord.gg/sBGxGhcFG4)`)//ab intentleri ac kapalı
-      .setFooter(`${client  .user.username}'den Engellendiniz.`)
+      .setFooter(`${client.user.username}'den Engellendiniz.`)
       message.channel.send(hataembed);
+      return;  
+    }
+    if (bakım) {
+        require("moment-duration-format");
+    let bayrakab = db.get(`bakımsüre`);
+    const duration = moment
+      .duration(Date.now() - bayrakab)
+      .format(" D [gün], H [saat], m [dakika], s [saniye]");
+      
+      const bakımembed = new Discord.MessageEmbed()
+        .setColor("RED")
+        .setDescription(`Bakımdayız! Bakıma alan \`${client.users.cache.get(karalistealan).tag}\` Bakım Sebebi : ${bakım} Bakımda Geçen Süre: ${duration}.`)
+      message.channel.send(bakımembed);
       return;  
     }
     cmd.run(client, message, params);
