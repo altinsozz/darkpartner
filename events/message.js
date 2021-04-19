@@ -24,8 +24,8 @@ module.exports = async message => {
     
     let kara = db.get(`kara_${message.author.id}`);
     let karalistealan = db.get(`karaalan_${message.author.id}`)
-    let bakım = db.get('bakım')
-    let bakımalan = db.get('bakımalan', message.author.id)
+    let bakım = db.get(`bakım_`)
+    let bakımalan = db.get(`bakımalan_${message.author.id}`)
     if (kara) {
       const hataembed = new Discord.MessageEmbed()
         .setColor("RED")
@@ -34,7 +34,7 @@ module.exports = async message => {
         .setImage('https://cdn.discordapp.com/attachments/816981794917187584/817744432572399646/Baslksz-2.jpg')
         .setDescription(`
 Üzgünüm Ancak Komutları Kullanamazsınız!
-\`${client.users.cache.get(karalistealan).tag}\` Tarafından **${kara}** Sebebiyle Komutları Kullanmanız Yasaklandı!.
+\`${client.users.cache.get(karalistealan).tag || 'Kullanıcıyı Bulamıyorum.'}\` Tarafından **${kara}** Sebebiyle Komutları Kullanmanız Yasaklandı!.
 
 Detaylar İçin [Tıkla!](https://discord.gg/sBGxGhcFG4)`)//ab intentleri ac kapalı
       .setFooter(`${client.user.username}'den Engellendiniz.`)
@@ -42,6 +42,7 @@ Detaylar İçin [Tıkla!](https://discord.gg/sBGxGhcFG4)`)//ab intentleri ac kap
       return;  
     }
     if (bakım) {
+if (!ayarlar.sahip.includes(message.author.id) && !ayarlar.sahip.includes(message.author.id)) {
         require("moment-duration-format");
     let bayrakab = db.get(`bakımsüre`);
     const duration = moment
@@ -50,10 +51,11 @@ Detaylar İçin [Tıkla!](https://discord.gg/sBGxGhcFG4)`)//ab intentleri ac kap
       
       const bakımembed = new Discord.MessageEmbed()
         .setColor("RED")
-        .setDescription(`Bakımdayız! Bakıma alan \`${client.users.cache.get(karalistealan).tag}\` Bakım Sebebi : ${bakım} Bakımda Geçen Süre: ${duration}.`)
+        .setDescription(`Bakımdayız! Bakıma alan \`${client.users.cache.get(bakımalan).tag || 'Kullanıcıyı Bulamıyorum.'}\` Bakım Sebebi : ${bakım} Bakımda Geçen Süre: **${duration}**.`)
       message.channel.send(bakımembed);
       return;  
     }
+    };
     cmd.run(client, message, params);
   } //npm.dbli olcak kardesim
 };
