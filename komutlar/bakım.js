@@ -65,6 +65,9 @@ if(message.author.id !== '699597747657113653') if(message.author.id !== '5481452
           const reaction = collected.first();
 
           if (reaction.emoji.name === "✅") {
+            db.delete(`bakımsüre_`);
+            db.delete(`bakımalan_`);
+            db.delete(`bakım_`);
             let bayrakwenqwe = new Discord.MessageEmbed()
               .setColor("RANDOM")
               .setAuthor(message.author.tag)
